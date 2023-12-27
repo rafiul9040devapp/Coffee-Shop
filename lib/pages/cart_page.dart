@@ -14,6 +14,32 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   void removeFromCart(Coffee coffee) {
     Provider.of<CoffeeShop>(context, listen: false).removeItemFromCart(coffee);
+
+    // Flushbar(
+    //   title: "${coffee.name} is removed...",
+    //   titleColor: Colors.black,
+    //   titleSize: 15,
+    //   flushbarPosition: FlushbarPosition.TOP,
+    //   flushbarStyle: FlushbarStyle.FLOATING,
+    //   reverseAnimationCurve: Curves.decelerate,
+    //   forwardAnimationCurve: Curves.elasticOut,
+    //   backgroundColor: Colors.white10,
+    //   duration: const Duration(seconds: 2),
+    // ).show(context);
+
+    var snackBar = SnackBar(
+      content: Text(
+        "${coffee.name} is removed...",
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+      ),
+      duration: const Duration(seconds: 1),
+      backgroundColor: Colors.white10,
+      clipBehavior: Clip.none,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void payNow() {
@@ -22,11 +48,13 @@ class _CartPageState extends State<CartPage> {
     for (var coffee in cart) {
       total = total + double.parse(coffee.price);
     }
+    var subTotal = double.parse(total.toStringAsFixed(2));
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text("You Have To Pay \$$total"),
-            ));
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("You Have To Pay: \$$subTotal"),
+      ),
+    );
   }
 
   @override
@@ -50,10 +78,8 @@ class _CartPageState extends State<CartPage> {
                             return CoffeeTile(
                                 coffee: eachCoffee,
                                 onPressed: () => removeFromCart(eachCoffee),
-                                icon: const Icon(Icons.delete)
-                            );
-                          })
-                  ),
+                                icon: const Icon(Icons.delete));
+                          })),
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: payNow,

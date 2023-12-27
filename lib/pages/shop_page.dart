@@ -14,11 +14,23 @@ class ShopPage extends StatefulWidget {
 class _ShopPageState extends State<ShopPage> {
   void addToCart(Coffee coffee) {
     Provider.of<CoffeeShop>(context, listen: false).addItemToCart(coffee);
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text("Successfully added to cart:  ${coffee.name}"),
-            ));
+
+    var snackBar = SnackBar(
+      content: Text(
+        "Successfully added to cart:  ${coffee.name}",
+        style: const TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 15),
+      ),
+      duration: const Duration(milliseconds: 25),
+      backgroundColor: Colors.white10,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    // showDialog(
+    //     context: context,
+    //     builder: (context) => AlertDialog(
+    //           title: Text("Successfully added to cart:  ${coffee.name}"),
+    //         ));
   }
 
   @override
